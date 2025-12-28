@@ -26,8 +26,11 @@
 Run this command in your terminal:
 
 ```
-# Install using pip
-pip install gitree       
+# Install the latest version using pip
+pip install gitree    
+
+# Stable version (older, lacks features)
+pip install gitree==0.1.3
 ```
 
 ### 💡 Usage
