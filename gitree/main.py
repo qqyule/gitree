@@ -52,14 +52,37 @@ def main() -> None:
     # Validate and resolve all paths
     roots = resolve_root_paths(args, logger=logger)
 
+    # Interactive mode: select files for each root if requested
+    selected_files_map = {}
+    if args.interactive:
+        from .services.interactive import select_files
+        # We need to filter roots if user cancels selection or selects nothing?
+        # Current behavior in services: if not selected_files: continue.
+        # So we should probably keep that logic.
+        roots_to_keep = []
+        for root in roots:
+            selected = select_files(
+                root=root,
+                output_buffer=output_buffer,
+                logger=logger,
+                respect_gitignore=not args.no_gitignore,
+                gitignore_depth=args.gitignore_depth,
+                extra_excludes=args.exclude,
+                include_patterns=args.include,
+                include_file_types=args.include_file_types
+            )
+            if selected:
+                selected_files_map[root] = selected
+                roots_to_keep.append(root)
+        roots = roots_to_keep
 
     # if zipping is requested
     if args.zip is not None:
-        zip_roots(args, roots, output_buffer, logger)
+        zip_roots(args, roots, output_buffer, logger, selected_files_map)
 
     # else, print the tree normally
     else:       
-        run_tree_mode(args, roots, output_buffer, logger)
+        run_tree_mode(args, roots, output_buffer, logger, selected_files_map)
 
 
     # print the output only if not copied to clipboard or zipped or output to file

@@ -224,28 +224,16 @@ def run_tree_mode(
     roots: List[Path],
     output_buffer,
     logger,
+    selected_files_map: Optional[dict] = None
 ) -> None:
     """
     Run the normal tree-printing workflow (non-zip mode).
     """
+    selected_files_map = selected_files_map or {}
 
     for i, root in enumerate(roots):
-        # Interactive mode for each path (if enabled)
-        selected_files = None
-        if args.interactive:
-            from .interactive import select_files
-            selected_files = select_files(
-                root=root,
-                respect_gitignore=not args.no_gitignore,
-                gitignore_depth=args.gitignore_depth,
-                extra_excludes=args.exclude,
-                include_patterns=args.include,
-                exclude_patterns=args.exclude,
-                include_file_types=args.include_file_types,
-                files_first=args.files_first,
-            )
-            if not selected_files:
-                continue
+        # Interactive mode handled in main.py now
+        selected_files = selected_files_map.get(root)
 
         # Add header for multiple paths
         if len(roots) > 1:
