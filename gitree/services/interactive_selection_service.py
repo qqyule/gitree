@@ -349,7 +349,7 @@ class InteractiveSelectionService:
 
             # Move to home position
             sys.stdout.write(_ansi_home())
-            
+
             if first_render:
                 first_render = False
 
@@ -380,7 +380,7 @@ class InteractiveSelectionService:
                         ind = "│"
 
                 sys.stdout.write(_ansi_clear_line())
-                
+
                 if idx < end:
                     item = tree[idx]
                     indent = "  " * item["depth"]
@@ -393,7 +393,7 @@ class InteractiveSelectionService:
 
                     if not item.get("partial") and item["checked"]:
                         box = _ansi_green(box)
-                    
+
                     line = f"{indent}{box} {name}"
                     line = _truncate_ansi(line, content_w)
                     line = _pad_ansi(line, content_w)
@@ -405,7 +405,7 @@ class InteractiveSelectionService:
                 else:
                     blank = " " * content_w
                     sys.stdout.write("│" + blank + ind + "│")
-                
+
                 sys.stdout.write("\n")
 
             # BOTTOM BORDER
@@ -534,7 +534,7 @@ class InteractiveSelectionService:
         for child in children:
             if isinstance(child, dict):
                 continue
-            
+
             child_path = child if isinstance(child, Path) else Path(str(child))
             rel_path = child_path.relative_to(root).as_posix()
             file_index = len(tree)
